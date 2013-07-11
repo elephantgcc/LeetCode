@@ -16,15 +16,14 @@ public class Solution {
 			if (str.charAt(i) > '9' || str.charAt(i) < '0') {
 				return minus ? -result : result;
 			}
-			int tempResult = 10 * result + (str.charAt(i) - '0');
-			if (tempResult < result) {
+			if (result > (Integer.MAX_VALUE - (str.charAt(i) - '0')) / 10) {
 				if (minus) {
 					return Integer.MIN_VALUE;
 				} else {
 					return Integer.MAX_VALUE;
 				}
 			} else {
-				result = tempResult;
+				result = result * 10 + (str.charAt(i) - '0');
 			}
 		}
 		return minus ? -result : result;
