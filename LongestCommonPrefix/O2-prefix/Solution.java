@@ -18,8 +18,8 @@ public class Solution {
 
     
 	public static void main(String args[]) {
-		String [] strs = new String[100];
-		for (int i = 0; i < 100; ++i) {
+		String [] strs = new String[2000];
+		for (int i = 0; i < 2000; ++i) {
 			strs[i] = "";
 			for (int j = 0; j < 2000; ++j) {
 				strs[i] += "a";
