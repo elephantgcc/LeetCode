@@ -31,7 +31,7 @@ public class Solution {
                 hasGood = true;
             }
         }
-        dict.addAll(reachable);
+//        dict.addAll(reachable);
         if (hasGood) {
             return len;
         } else {
@@ -49,19 +49,20 @@ public class Solution {
         return diff == 1;
     }
 
-	public static void main(String args[]) {
+public static void main(String args[]) {
+		String start = "sand";
+		String end = "acne";
+		String [] dict = new String [] {"sane", "scne"};
 
-		String start = "red";
-		String end = "tax";
-		String[] dictArray = new String[] {"ted","tex","red","tax","tad","den","rex","pee"};
 
-		HashSet<String> dict = new HashSet<String>();
-		for (String s: dictArray) {
-			dict.add(s);
+		HashSet<String> set = new HashSet<String>();
+		for (String s : dict) {
+			set.add(s);
 		}
 		long t1 = System.currentTimeMillis();
-		System.out.println(new Solution().ladderLength(start, end, dict));
+		System.out.println(new Solution().ladderLength(start, end, set));
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2 - t1);
 	}
+
 }
