@@ -2,86 +2,68 @@ import java.util.*;
 
 public class Solution {
 	public ArrayList<ArrayList<String>> findLadders(String start, String end, HashSet<String> dict) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-        if (start.length() == 0 || start.equals(end)) {
-            return result;
-        }
+		if (start.equals(end)) {
+			return result;
+		}
 
-        if (isOneStep(start, end)) {
-			ArrayList<String> cell = new ArrayList<String>();
-			cell.add(start);
-			cell.add(end);
-			result.add(cell);
-            return result;
-        }
-        
-        HashSet<String> reachable = new HashSet<String>();
-        for (String node : dict) {
-            if (isOneStep(start, node)) {
-                reachable.add(node);
-            }
-        }
-        if (reachable.size() == 0) {
-            return result;
-        }
-        dict.removeAll(reachable);
-        int len = Integer.MAX_VALUE;
-        boolean hasGood = false;
-		ArrayList<ArrayList<ArrayList<String>>> container = new ArrayList<ArrayList<ArrayList<String>>>();
-        for (String cand : reachable) {
-            ArrayList<ArrayList<String>> next = findLadders(cand, end, dict);
-            if (next.size() != 0) {
-                len = Math.min(len, next.get(0).size() + 1);
-                hasGood = true;
-				container.add(next);
-            }
-        }
-		dict.addAll(reachable);
-		
-        if (hasGood) {
-			for (ArrayList<ArrayList<String>> next : container) {
-				if (next.get(0).size() + 1 == len) {
-					for (ArrayList<String> cell : next) {
-						cell.add(0, start);
-					}
-					result.addAll(next);
-				}
+		HashMap<String, ArrayList<ArrayList<String>>> currMap = new HashMap<String, ArrayList<ArrayList<String>>>();
+		ArrayList<ArrayList<String>> pathList = new ArrayList<ArrayList<String>>();
+		ArrayList<String> path = new ArrayList<String>();
+		path.add(start);
+		pathList.add(path);
+		currMap.put(start, pathList);
+		HashMap<String, ArrayList<ArrayList<String>>> nextMap = null;
+		Set<String> endWords = currMap.keySet();
+		dict.removeAll(endWords);
+		boolean reached = false;
+
+		while (endWords.size() > 0) {
+			nextMap = new HashMap<String, ArrayList<ArrayList<String>>>(); // new nextMap
+			for (String endWord : endWords) {
+				char[] array = endWord.toCharArray();
+				for (int i = 0; i < array.length; ++i) {
+					for (char c = 'a'; c <= 'z'; ++c) {
+						if (array[i] == c) {
+							continue;
+						}
+						char temp = array[i];
+						array[i] = c;
+						String candWord = new String(array);
+						if (candWord.equals(end)) { // reaches the end
+							reached = true;
+							for (ArrayList<String> prevPath : currMap.get(endWord)) {
+								prevPath.add(end);
+								result.add(prevPath);
+							}
+						} else if (dict.contains(candWord)) { // add children to nextMap
+							ArrayList<ArrayList<String>> newPathList = new ArrayList<ArrayList<String>>();
+							for (ArrayList<String> prevPath : currMap.get(endWord)) {
+								ArrayList<String> newPath = new ArrayList<String>();
+								newPath.addAll(prevPath);
+								newPath.add(candWord);
+								newPathList.add(newPath);
+							}
+							if (!nextMap.containsKey(candWord)) {
+								nextMap.put(candWord, newPathList);
+							} else {
+								nextMap.get(candWord).addAll(newPathList);
+							}
+						}
+						array[i] = temp;
+					} // change array and try
+				} // change array and try
+			} // for each endWord
+			if (reached) {
+				return result;
 			}
-            return result;
-        } else {
-            return result;
-        }
+			currMap = nextMap;
+			endWords = currMap.keySet();
+			dict.removeAll(endWords);
+		}
+		return new ArrayList<ArrayList<String>>();	
     }
     
-    private boolean isOneStep(String s1, String s2) {
-        int diff = 0;
-        for (int i = 0; i < s1.length(); ++i) {
-            if (s1.charAt(i) != s2.charAt(i)) {
-                ++diff;
-            }
-        }
-        return diff == 1;
-    }
-
-/*	public static void main(String args[]) {
-
-		String start = "red";
-		String end = "tax";
-		String[] dictArray = new String[] {"ted","tex","red","tax","tad","den","rex","pee"};
-
-		HashSet<String> dict = new HashSet<String>();
-		for (String s: dictArray) {
-			dict.add(s);
-		}
-		long t1 = System.currentTimeMillis();
-		System.out.println(new Solution().findLadders(start, end, dict));
-		long t2 = System.currentTimeMillis();
-		System.out.println(t2 - t1);
-	}
-*/
-
 	public static void main(String args[]) {
 
 		String start = "cet";
