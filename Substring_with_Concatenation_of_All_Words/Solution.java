@@ -4,7 +4,6 @@ public class Solution {
     public ArrayList<Integer> findSubstring(String S, String[] L) {
 
 		ArrayList<Integer> result = new ArrayList<Integer>();
-
 		if (L == null || L.length == 0 || S == null || S.length() == 0) {
 			return result;
 		}
@@ -23,14 +22,28 @@ public class Solution {
 		int rangeLength = numWords * wordLength;
 		for (int i = 0; i <= S.length() - rangeLength; ++i) {
 			HashMap<String, Integer> histogramNew = new HashMap<String, Integer>();
-			for (int j = 0; j < numWords; ++j) {
-				String word = S.substring(i + j * wordLength, i + (j + 1) * wordLength); 
+			int j = 0;
+			for (; j < numWords; ++j) {
+				String word = S.substring(i + j * wordLength, i + (j + 1) * wordLength);
+
+				if (!histogramOld.containsKey(word)) {
+					break;
+				}
+
 				if (!histogramNew.containsKey(word)) {
 					histogramNew.put(word, 1);
 				} else {
 					histogramNew.put(word, histogramNew.get(word) + 1);
 				}
+
+				if (histogramNew.get(word) > histogramOld.get(word)) {
+					break;
+				}
 			}
+			if (j == numWords) {
+				result.add(i);
+			}
+/*
 			if (histogramOld.size() != histogramNew.size()) {
 				continue;
 			} else {
@@ -45,11 +58,12 @@ public class Solution {
 					result.add(i);
 				}
 			}
+*/
 		}
 		return result;
 	}
 
 	public static void main(String args[]) {
-		System.out.println(new Solution().findSubstring("abaababbaba", new String[] {"ab", "ba", "ab", "ba"}));
+		System.out.println(new Solution().findSubstring("aaa", new String[] {"a", "b"}));
 	}
 }
