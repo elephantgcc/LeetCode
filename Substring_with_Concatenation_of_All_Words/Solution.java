@@ -50,6 +50,6 @@ public class Solution {
 	}
 
 	public static void main(String args[]) {
-		System.out.println(new Solution().findSubstring("barfoooo", new String[] {"bar", "foo"}));
+		System.out.println(new Solution().findSubstring("abaababbaba", new String[] {"ab", "ba", "ab", "ba"}));
 	}
 }
