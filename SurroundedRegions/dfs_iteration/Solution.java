@@ -1,39 +1,59 @@
+import java.util.*;
+
 public class Solution {
-	public void solve(char[][] board) {
-
-		if (board == null) {
-			return;
-		}
-		int M = board.length;
-		if (M <= 0) {
-			return;
-		}
-		int N = board[0].length;
-		if (N <= 0) {
-			return;
-		}
-
-		boolean [][] upLeft = new boolean[M + 2][N + 2]; //default false
-		boolean [][] downRight = new boolean[M + 2][N + 2];
-
-		for (int i = 1; i <= M; ++i) {
-			for (int j = 1; j <= N; ++j) {
-				upLeft[i][j] = board[i - 1][j - 1] == 'X'
-						||(upLeft[i - 1][j] && upLeft[i][j - 1]);
-				downRight[M - i + 1][N - j + 1] = board[M - i][N - j] == 'X'
-						|| (downRight[M - i + 2][N - j + 1] && downRight[M - i + 1][N - j + 2]);
-			}
-		}
-
-		for (int i = 1; i <= M; ++i) {
-			for (int j = 1; j <= N; ++j) {
-				if (board[i - 1][j - 1] == 'O'
-						&& (upLeft[i][j] && downRight[i][j])) {
-					board[i - 1][j - 1] = 'X';
-				}
-			}
-		}
+	
+    public void solve(char[][] board) {
+        if (board.length == 0) {
+            return;
         }
+        int M = board.length;
+        int N = board[0].length;
+        for (int j = 0; j < N; ++j) {
+            dfs(board, 0, j);
+            dfs(board, M - 1, j);
+        }
+        for (int i = 0; i < M; ++i) {
+            dfs(board, i, 0);
+            dfs(board, i, N - 1);
+        }
+        for (int i = 0; i < M; ++i) {
+            for (int j = 0; j < N; ++j) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                } else if (board[i][j] == '+') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private void dfs(char[][] board, int i, int j) {
+		int M = board.length;
+        int N = board[0].length;
+        if (board[i][j] != 'O') {
+			return;
+		}
+		Stack<Integer> st = new Stack<Integer>();
+		st.push(i * N + j);   
+        while (st.size() > 0) {
+            int x = st.peek() / N;
+            int y = st.peek() % N;
+            st.pop();
+            board[x][y] = '+';
+            if (x - 1 >= 0 && board[x - 1][y] == 'O') {
+                st.push( (x - 1) * N + y);
+            }
+            if (y + 1 < N && board[x][y + 1] == 'O') {
+                st.push(x * N + (y + 1));
+            }
+            if (x + 1 < M && board[x + 1][y] == 'O') {
+                st.push((x + 1) * N + y);
+            }
+            if (y - 1 >= 0 && board[x][y - 1] == 'O') {
+                st.push(x * N + (y - 1));
+            }
+        }
+    }
 
 	public static void main(String args[]) {
 		/*char[][] board = new char[][] {{'X', 'X', 'X', 'X'},
