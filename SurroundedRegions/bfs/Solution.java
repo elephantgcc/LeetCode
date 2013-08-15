@@ -16,6 +16,7 @@ public class Solution {
 			bfs(board, i, 0);
 			bfs(board, i, N - 1);
 		}
+
 		for (int i = 0; i < M; ++i) {
 			for (int j = 0; j < N; ++j) {
 				if (board[i][j] == 'O') {
@@ -331,9 +332,9 @@ public class Solution {
 /*
 		for (int i = 0; i < board.length; ++i) {
 			for (int j = 0; j < board[i].length; ++j) {
-				System.out.print(board[i][j] + " ");
+				system.out.print(board[i][j] + " ");
 			}
-			System.out.println();
+			system.out.println();
 		}
 */
 	}
