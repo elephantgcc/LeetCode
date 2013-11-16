@@ -19,11 +19,32 @@ public class Solution {
 				if (gapCur < gapLeftMove && gapCur < gapRightMove) {
 					break;
 				} else {
-					if (gapLeftMove < gapRightMove) { // bug!: 1,2,2,3,3; t=0
+					if (gapLeftMove < gapRightMove) {
 						++j;
 					} else {
 						--k;
 					}
+					// if we change this block into:
+					//
+					// if (gapLeftMove <= gapRightMove) {
+					//	++j;
+					//} else {
+					//	--k;
+					//}
+					//
+					// there will be a bug: 1,2,2,3,3; t=0
+					//                      i j     k
+					//
+					// For the current version:
+					// The reason why the current version works, is that the sorting is assending,
+					// so that "<" is OK.
+					// and by accident, the current version will solve this example:
+					// 1, 2, 2, 3, 3; t = 100
+					// i  j        k
+					// although this step we should ++j, instead of the current --k
+					// however, the fianl answer will always be the most right three numbers,
+					// so this bug is hidden.
+					
 				}
 			}
 			
