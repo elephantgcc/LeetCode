@@ -19,7 +19,7 @@ public class Solution {
 				if (gapCur < gapLeftMove && gapCur < gapRightMove) {
 					break;
 				} else {
-					if (gapLeftMove < gapRightMove) {
+					if (gapLeftMove < gapRightMove) { // bug!: 1,2,2,3,3; t=0
 						++j;
 					} else {
 						--k;
